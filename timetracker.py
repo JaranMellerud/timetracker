@@ -82,10 +82,12 @@ class TimeTracker:
             self.button_start_stop.grid(row=ind+1, column=4)
         self.canvas.configure(height=self.HEIGHT)
 
+    def displayTime(self):
+        pass
+
 
 if __name__ == "__main__":
     database = DataBase()
-    database.createTable()
     master = tk.Tk()
     tt = TimeTracker(master)
     master.mainloop()

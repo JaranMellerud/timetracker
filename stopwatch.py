@@ -1,70 +1,44 @@
-from tkinter import *
 import time
-from database import conn, cur, numActivities, getActivities
 
 
-class StopWatch(Frame):  
-    """ Implements a stop watch frame widget. """                                                                
-    def __init__(self, parent=None, **kw):        
-        Frame.__init__(self, parent, kw)
-        self._start = 0.0        
-        self._elapsedtime = 0.0
-        self._running = 0
-        self.timestr = StringVar()               
-        self.makeWidgets()   
+class StopWatch:
+    def __init__(self):
+        self.seconds = int(0)
+        self.minutes = int(0)
+        self.hours = int(0)
+        self.run = False
 
-    def makeWidgets(self):                         
-        """ Make the time label. """
-        l = Label(self, textvariable=self.timestr)
-        self._setTime(self._elapsedtime)
-        l.pack(fill=X, expand=NO, pady=2, padx=2)                      
-    
-    def _update(self): 
-        """ Update the label with elapsed time. """
-        self._elapsedtime = time.time() - self._start
-        self._setTime(self._elapsedtime)
-        self._timer = self.after(50, self._update)
-    
-    def _setTime(self, elap):
-        """ Set the time string to Minutes:Seconds:Hundreths """
-        minutes = int(elap/60)
-        seconds = int(elap - minutes*60.0)
-        hseconds = int((elap - minutes*60.0 - seconds)*100)                
-        self.timestr.set('%02d:%02d:%02d' % (minutes, seconds, hseconds))
-        
-    def Start(self):                                                     
-        """ Start the stopwatch, ignore if running. """
-        if not self._running:            
-            self._start = time.time() - self._elapsedtime
-            self._update()
-            self._running = 1        
-    
-    def Stop(self):                                    
-        """ Stop the stopwatch, ignore if stopped. """
-        if self._running:
-            self.after_cancel(self._timer)            
-            self._elapsedtime = time.time() - self._start    
-            self._setTime(self._elapsedtime)
-            self._running = 0
-    
-    def Reset(self):                                  
-        """ Reset the stopwatch. """
-        self._start = time.time()         
-        self._elapsedtime = 0.0    
-        self._setTime(self._elapsedtime)
-        
-        
-def main():
-    root = Tk()
-    sw = StopWatch(root)
-    sw.pack(side=TOP)
-    
-    Button(root, text='Start', command=sw.Start).pack(side=LEFT)
-    Button(root, text='Stop', command=sw.Stop).pack(side=LEFT)
-    Button(root, text='Reset', command=sw.Reset).pack(side=LEFT)
-    Button(root, text='Quit', command=root.quit).pack(side=LEFT)
-    
-    root.mainloop()
+        # creating the stopwatch
+        self.createStopWatch()
 
-if __name__ == '__main__':
-    main()
+    # function to create the stopwatch
+    def createStopWatch(self):
+        while self.run == True:
+            if self.seconds > 59:
+                self.seconds = 0
+                self.minutes += 1
+            if self.minutes > 59:
+                self.minutes = 0
+                self.hours += 1
+            self.seconds += 1
+            # setting format of the clock to hh:mm:ss
+            if len(str(self.hours)) == 1:
+                self.hours_string = "0" + str(self.hours)
+            else:
+                self.hours_string = str(self.hours)
+            if len(str(self.minutes)) == 1:
+                self.minutes_string = "0" + str(self.minutes)
+            else:
+                self.minutes_string = str(self.minutes)
+            if len(str(self.seconds)) == 1:
+                self.seconds_string = "0" + str(self.seconds)
+            else:
+                self.seconds_string = str(self.seconds)
+            # string with time to be displayed
+            self.time_string = self.hours_string + ":" + self.minutes_string + ":" + self.seconds_string
+            time.sleep(1)
+            print(self.time_string)
+
+    # function to start and stop the stopwatch
+    def startStopWatch(self):
+        pass

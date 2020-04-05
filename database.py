@@ -5,6 +5,7 @@ class DataBase():
     def __init__(self):
         self.conn = sqlite3.connect("timetracker.db")
         self.cur = self.conn.cursor()
+        self.createTable()
 
     # creating table in database if table not exists already
     def createTable(self):
