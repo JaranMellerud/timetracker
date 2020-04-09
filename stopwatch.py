@@ -5,18 +5,22 @@ from database import DataBase
 
 class StopWatch:  
     """ Implements a stop watch label. """                                                                
-    def __init__(self, frame, activity, row, column):        
+    def __init__(self, frame, activity, total_or_session, row, column):        
         db = DataBase()
         self.activity = db.getActivity(activity)
         self._start = 0.0
-        self._elapsedtime = self.getElapsedTime()
+        """ Setting the elapsed time for the different time widgets. The elapsed time is 0 if it is a session widget. """
+        if total_or_session == "total":
+            self._elapsedtime = self.getElapsedTime()
+        else:
+            self._elapsedtime = 0
         self._running = 0
         self.timestr = tk.StringVar()
         self.frame = frame
         self.row = row
         self.column = column
         self.makeWidgets()
-        self.makeButtons()
+        #self.makeButtons()
 
     def getElapsedTime(self):
         """ Gets the elapsed time for the activity from the database """
@@ -32,12 +36,10 @@ class StopWatch:
         self._setTime(self._elapsedtime)
         self.time_label.grid(row=self.row, column=self.column)
 
-    def makeButtons(self):
-        """ Make the buttons for start/stop and reset. """
-        self.start_stop_button = tk.Button(self.frame, text="Start/Stop", command=self.startStop)
-        self.start_stop_button.grid(row=self.row, column=self.column+1)
-        self.reset_button = tk.Button(self.frame, text="Reset", command=self.Reset)
-        self.reset_button.grid(row=self.row, column=self.column+2)               
+    #def makeButtons(self):
+    #    """ Make the buttons for start/stop and reset. """
+    #    self.start_stop_button = tk.Button(self.frame, text="Start/Stop", command=self.startStop)
+    #    self.start_stop_button.grid(row=self.row, column=self.column+2)          
     
     def _update(self): 
         """ Update the label with elapsed time. """

@@ -41,8 +41,10 @@ class TimeTracker:
             self.activities_frame.pack()
             self.title_label_1 = tk.Label(self.activities_frame, text="Activity")
             self.title_label_1.grid(row=0, column=0)
-            self.title_label_2 = tk.Label(self.activities_frame, text="Time")
+            self.title_label_2 = tk.Label(self.activities_frame, text="Total")
             self.title_label_2.grid(row=0, column=1)
+            self.title_label_3 = tk.Label(self.activities_frame, text="Session")
+            self.title_label_3.grid(row=0, column=2)
             """ Creates a dictionary where the keys are activity number and the values are lists with the corresponding activity name and time labels. """
             self.activities = db.getActivities()
             self.activities_dict = {}
@@ -55,9 +57,20 @@ class TimeTracker:
                         self.activities_dict[index].append(tk.Label(self.activities_frame, text=act_time))
                         self.activities_dict[index][ind].grid(row=index+1, column=ind)
                     elif ind == 1:
-                        self.activities_dict[index].append(StopWatch(self.activities_frame, activity[0], row=index+1, column=ind))                     
+                        self.activities_dict[index].append(StopWatch(self.activities_frame, activity[0], total_or_session="total", row=index+1, column=ind))
+                        self.activities_dict[index].append(StopWatch(self.activities_frame, activity[0], total_or_session="session", row=index+1, column=ind+1))
+                self.activities_dict[index].append(tk.Button(self.activities_frame, text="Start/Stop", command=self.combine_funcs(self.activities_dict[index][1].startStop, self.activities_dict[index][2].startStop)))             
+                self.activities_dict[index][-1].grid(row=index+1, column=3)
         createActivityRows() # initializing the function to create the rows with all the activities.
         self.createAddArea() # initializing the function to create the area to add new activities.
+
+    """ Combines functions. Is used to execute the two commands for the start/stop button (start/stop the total time and start/stop the session time) """
+    def combine_funcs(self, *funcs):
+        def combined_func(*args, **kwargs):
+            for f in funcs:
+                f(*args, **kwargs)
+        return combined_func
+
 
     def createAddArea(self):
         """ Creates area where the user can add new activities. """
@@ -70,7 +83,7 @@ class TimeTracker:
         """ Saves the current time from the labels to the database. Is to be run on exit """
         for value in self.activities_dict.values():
             activity_name = value[0]['text']
-            activity_time = value[-1].timestr.get()
+            activity_time = value[1].timestr.get()
             db.saveTime(activity_name, activity_time)
         self.root.destroy()
 
