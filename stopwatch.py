@@ -20,7 +20,6 @@ class StopWatch:
         self.row = row
         self.column = column
         self.makeWidgets()
-        #self.makeButtons()
 
     def getElapsedTime(self):
         """ Gets the elapsed time for the activity from the database """
@@ -32,14 +31,9 @@ class StopWatch:
 
     def makeWidgets(self):                         
         """ Make the time label. """
-        self.time_label = tk.Label(self.frame, textvariable=self.timestr)
+        self.time_label = tk.Label(self.frame, textvariable=self.timestr, font=('Helvetica', 12), bg="gray26", fg="white")
         self._setTime(self._elapsedtime)
-        self.time_label.grid(row=self.row, column=self.column)
-
-    #def makeButtons(self):
-    #    """ Make the buttons for start/stop and reset. """
-    #    self.start_stop_button = tk.Button(self.frame, text="Start/Stop", command=self.startStop)
-    #    self.start_stop_button.grid(row=self.row, column=self.column+2)          
+        self.time_label.grid(row=self.row, column=self.column)    
     
     def _update(self): 
         """ Update the label with elapsed time. """

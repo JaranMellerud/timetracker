@@ -37,7 +37,7 @@ class DataBase():
         activity = self.cur.execute(f"SELECT activity, time FROM Activities WHERE activity='{activity}'").fetchall()[0]
         return activity
 
-    def DeleteActivity(self, activity_to_delete):
+    def deleteActivity(self, activity_to_delete):
         """ Deletes activity from the database """
         self.cur.execute(f'DELETE FROM Activities WHERE activity="{activity_to_delete}"')
         self.conn.commit()
