@@ -1,93 +1,82 @@
 import tkinter as tk
+from stopwatch import StopWatch
 from database import DataBase
 
 
 class TimeTracker:
-    def __init__(self, master):
-        # loading variables to set properties
-        self.num_activities = database.numActivities()
-        self.activities = database.getActivities()
+    def __init__(self, root):
+        self.activities = db.getActivities()
+        self.num_activities = db.getActivities()
+        self.FONT_TYPE = "helvetica" #property
+        self.root = root
+        self.root.protocol("WM_DELETE_WINDOW", self.saveTimeToDatabase) # saves the current times from the labels to the database on exit
+        self.root.title("Time Tracker")
+        self.updateInterface()
 
-        # properties for sizes and fonts
-        self.HEIGHT = 75 + self.num_activities * 35
-        self.WIDTH = 300
-        self.TITLE = "Time Tracker"
-        self.FONT_TYPE = 'helvetica'
-        self.BIG_LABEL_FONT = (self.FONT_TYPE, '16', "bold")
-        self.SMALL_LABEL_FONT = (self.FONT_TYPE, '13')
-        self.ENTRY_FONT = (self.FONT_TYPE, '12')
-
-        self.master = master
-        self.master.title(self.TITLE)
-        self.canvas = tk.Canvas(self.master, width=self.WIDTH, height=self.HEIGHT)
-        self.canvas.pack(fill="both", expand=True)
-
-        self.entry_add = None
-        
-        # showing different interface if no activities added
-        if self.num_activities == 0:
+    def updateInterface(self):
+        """ Updates the interface, between two different ones. """
+        self.num_activities = db.getActivities()
+        try:
+            self.main_frame.destroy()
+        except Exception:
+            pass
+        self.main_frame = tk.Frame(self.root)
+        self.main_frame.pack()
+        if not self.num_activities:
             self.showFirstInterface()
         else:
             self.showSecondInterface()
+    
+    def showFirstInterface(self):
+        """ Shows the interface if the user has not added any activities yet. """
+        self.add_activity_label = tk.Label(self.main_frame, text="Add An Activity To Start!", font=(self.FONT_TYPE, '16', 'bold'))
+        self.add_activity_label.pack()
+        self.createAddArea() # initializing the function to create the area to add the new activities.
 
-    # function to show interface if there arent added any activities yet
-    def showFirstInterface(self):        
-        self.label_add = tk.Label(self.canvas, text="Add An Activity To Start!", font=self.BIG_LABEL_FONT)        
-        self.canvas.create_window(140, 15, window=self.label_add)
-        # entry to add new activities
-        self.entry_add = tk.Entry(self.canvas, text="Activity", font=self.ENTRY_FONT)
-        self.canvas.create_window(110, 50, window=self.entry_add)
-        self.button_add = tk.Button(text="Add", command=lambda:[database.addActivity(self.entry_add), self.entry_add.delete(first=0, last="end"), self.showSecondInterface()])
-        self.button_add.focus_set()
-        self.canvas.create_window(250, 50, window=self.button_add)
-        
-    # function to show interface if there are added activities
     def showSecondInterface(self):
-        # grid with activities, total and time in a frame
-        self.frame = tk.Frame(self.canvas)
-        self.frame.place(relwidth=1, relheight=1)
-        self.label_activity = tk.Label(self.frame, text="Activity", font=self.SMALL_LABEL_FONT)
-        self.label_activity.grid(row=0, column=0)   
-        self.label_total = tk.Label(self.frame, text="Total", font=self.SMALL_LABEL_FONT)
-        self.label_total.grid(row=0, column=1)
-        self.label_time = tk.Label(self.frame, text="Time", font=self.SMALL_LABEL_FONT)
-        self.label_time.grid(row=0, column=2)
-        # creating rows with all the activities
-        self.createActivityRows()
-        # creating entry and button to add new activities
-        self.createActivityEntry()
+        """ Shows the interface if the user has added activities. """
+        def createActivityRows():
+            """ Creates a rows with each activity, time and start/stop button. Inside a frame. """
+            self.activities_frame = tk.Frame(self.main_frame)
+            self.activities_frame.pack()
+            self.title_label_1 = tk.Label(self.activities_frame, text="Activity")
+            self.title_label_1.grid(row=0, column=0)
+            self.title_label_2 = tk.Label(self.activities_frame, text="Time")
+            self.title_label_2.grid(row=0, column=1)
+            """ Creates a dictionary where the keys are activity number and the values are lists with the corresponding activity name and time labels. """
+            self.activities = db.getActivities()
+            self.activities_dict = {}
+            for index, activity in enumerate(self.activities):
+                self.activities_dict[index] = []
+                for ind, act_time in enumerate(activity):
+                    """ If ind == 0, then the object is a activity name, and labels are created for them.
+                        If ind == 1, then the object is a timestring, and labels are created for them with the StopWatch class. """
+                    if ind == 0:
+                        self.activities_dict[index].append(tk.Label(self.activities_frame, text=act_time))
+                        self.activities_dict[index][ind].grid(row=index+1, column=ind)
+                    elif ind == 1:
+                        self.activities_dict[index].append(StopWatch(self.activities_frame, activity[0], row=index+1, column=ind))                     
+        createActivityRows() # initializing the function to create the rows with all the activities.
+        self.createAddArea() # initializing the function to create the area to add new activities.
 
-    # function to create entry and button to add new activities
-    def createActivityEntry(self):
-        if self.entry_add is not None:
-            self.entry_add.destroy()
-            self.button_add.destroy()
-        self.num_activities = database.numActivities()
-        self.entry_add = tk.Entry(self.canvas, text="Activity", font=self.ENTRY_FONT)
-        self.canvas.create_window(110, 45 + self.num_activities * 35, window=self.entry_add)
-        self.button_add = tk.Button(text="Add", command=lambda:[database.addActivity(self.entry_add), self.entry_add.delete(first=0, last="end"), self.createActivityRows()])
-        self.canvas.create_window(250, 45 + self.num_activities * 35, window=self.button_add)
+    def createAddArea(self):
+        """ Creates area where the user can add new activities. """
+        self.add_activity_entry = tk.Entry(self.main_frame, text="Activity", font=(self.FONT_TYPE, '13'))
+        self.add_activity_entry.pack(side=tk.LEFT)
+        self.add_activity_button = tk.Button(self.main_frame, text="Add", font=(self.FONT_TYPE, '13'), command=lambda:[db.addActivity(self.add_activity_entry), self.add_activity_entry.delete(first=0, last="end"), self.updateInterface()])
+        self.add_activity_button.pack(side=tk.LEFT)
 
-    # function to create rows with activities and time
-    def createActivityRows(self):
-        self.activities = database.getActivities()
-        self.num_activities = database.numActivities()
-        self.HEIGHT = 75 + self.num_activities * 35
-        self.createActivityEntry()
-        for ind, activity in enumerate(self.activities):
-            for index, value in enumerate(activity):
-                self.label_activity = tk.Label(self.frame, text=value)
-                self.label_activity.grid(row=ind+1, column=index)     
-            self.button_start_stop = tk.Button(self.frame, text="Start/Stop")
-            self.button_start_stop.grid(row=ind+1, column=4)
-        self.canvas.configure(height=self.HEIGHT)
-
-    def displayTime(self):
-        pass
+    def saveTimeToDatabase(self):
+        """ Saves the current time from the labels to the database. Is to be run on exit """
+        for value in self.activities_dict.values():
+            activity_name = value[0]['text']
+            activity_time = value[-1].timestr.get()
+            db.saveTime(activity_name, activity_time)
+        self.root.destroy()
 
 
-if __name__ == "__main__":
-    database = DataBase()
-    master = tk.Tk()
-    tt = TimeTracker(master)
-    master.mainloop()
+if __name__ == '__main__':
+    db = DataBase()
+    root = tk.Tk()
+    tt = TimeTracker(root)
+    root.mainloop()
