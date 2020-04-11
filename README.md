@@ -31,4 +31,5 @@ I am learning Russian, as well as programming, and I thought it would be nice to
 * Working with time with the built-in time module
 
 ## Images
-![Without added words](https://user-images.githubusercontent.com/56685171/79041373-a393e400-7bef-11ea-89a3-3d26a046d067.png)
+![Without added activities](https://user-images.githubusercontent.com/56685171/79041373-a393e400-7bef-11ea-89a3-3d26a046d067.png)
+![With added activities](https://user-images.githubusercontent.com/56685171/79041470-709e2000-7bf0-11ea-8b1e-0d01526505fa.png)
