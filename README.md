@@ -31,4 +31,4 @@ I am learning Russian, as well as programming, and I thought it would be nice to
 * Working with time with the built-in time module
 
 ## Images
-![Without added words]()
+![Without added words](https://user-images.githubusercontent.com/56685171/79041373-a393e400-7bef-11ea-89a3-3d26a046d067.png)
