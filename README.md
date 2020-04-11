@@ -9,5 +9,5 @@ You need the Python interpreter installed on your computer. If you are using Pyt
 ### Installing
 1. Change directory to the directory you want the files to be stored inside, and clone the git repository with this command:
 ```
-$ git clone 
+$ git clone https://github.com/JaranMellerud/timetracker.git
 ```
