@@ -21,6 +21,10 @@ python timetracker.py
 ```
 **4.** Now the GUI opens. Here you can add or delete new activities and start/pause the timer. When you open the application again after you have closed it, all your activities and the time spent will be saved.
 
+## Built With
+* [tkinter](https://docs.python.org/3/library/tkinter.html) - GUI Toolkit
+* [SQLite](https://www.sqlite.org/index.html) - Database engine
+
 ## Why I Made It
 I am learning Russian, as well as programming, and I thought it would be nice to be able to track the time I spend on learning these skills. This way, I can set weekly minimum goals for how many hours I want to spend learning. I tried a few different apps, but they were just to complicated. I wanted an extremely minimalistic GUI that just sits in the corner of the screen and records time, nothing more. In addition, I realized that I should learn more about object-oriented programming. Building a GUI with tkinter is a good way to do this, since you have to organize a lot of different objects when using tkinter.
 
