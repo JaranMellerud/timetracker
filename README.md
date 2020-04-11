@@ -9,5 +9,14 @@ You need the Python interpreter installed on your computer. If you are using Pyt
 ### Installing
 1. Change directory to the directory you want the files to be stored inside, and clone the git repository with this command:
 ```
-$ git clone https://github.com/JaranMellerud/timetracker.git
+git clone https://github.com/JaranMellerud/timetracker.git
 ```
+2. Change directory to the project directory and install the required packages (preferably in a virtual environment you have created):
+```
+pip install -r requirements.txt
+```
+3. Run the application like this:
+```
+python timetracker.py
+```
+4. Now the GUI opens. Here you can add or delete new activities and start/pause the timer. When you open the application again after you have closed it, all your activities and the time spent will be saved.
