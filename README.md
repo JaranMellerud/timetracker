@@ -24,4 +24,11 @@ python timetracker.py
 ## Why I Made It
 I am learning Russian, as well as programming, and I thought it would be nice to be able to track the time I spent on those activities. This way, I can set weekly minimum goals in how many hours to spend learning. I tried a different apps, but they were just to complicated. I wanted a very minimalistic GUI that just sits in the corner of the screen and records time, nothing more. In addition, I realized that I should learn more about object-oriented programming. Building a GUI with tkinter is a good way to do this, since you have to organize a lot of different objects in tkinter.
 
+## What I Have Learned
+* tkinter fundamentals
+* Setting up and querying built in databases with sqlite3
+* Object-oriented programming fundamentals
+* Working with time with the built-in time module
 
+## Images
+![Without added words]()
