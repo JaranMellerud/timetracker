@@ -63,6 +63,8 @@ class TimeTracker:
             self.title_label_2.grid(row=0, column=1, padx=self.PADDINGX)
             self.title_label_3 = tk.Label(self.activities_frame, text="Session", font=self.TITLEFONT, bg=self.background_color, fg=self.foreground_color)
             self.title_label_3.grid(row=0, column=2, padx=self.PADDINGX)
+            self.title_label_4 = tk.Label(self.activities_frame, text="Added", font=self.TITLEFONT, bg=self.background_color, fg=self.foreground_color)
+            self.title_label_4.grid(row=0, column=3, padx=self.PADDINGX)
             """ Creates a dictionary where the keys are activity number and the values are lists with the corresponding activity name and time labels. """
             self.activities = db.getActivities()
             self.activities_dict = {}
@@ -77,10 +79,13 @@ class TimeTracker:
                     elif ind == 1:
                         self.activities_dict[index].append(StopWatch(self.activities_frame, activity[0], total_or_session="total", row=index+1, column=ind))
                         self.activities_dict[index].append(StopWatch(self.activities_frame, activity[0], total_or_session="session", row=index+1, column=ind+1))
+                    elif ind == 2:
+                        self.activities_dict[index].append(tk.Label(self.activities_frame, text=act_time, font=self.ACTIVITYFONT, bg=self.background_color, fg=self.foreground_color))
+                        self.activities_dict[index][ind+1].grid(row=index+1, column=ind+1)
                 self.activities_dict[index].append(tk.Button(self.activities_frame, text="Start/Stop", borderwidth=0, highlightthickness=0, fg=self.background_color, activebackground=self.background_color, bg=self.background_color, image=self.STARTSTOPICON, command=self.combine_funcs(self.activities_dict[index][1].startStop, self.activities_dict[index][2].startStop)))             
-                self.activities_dict[index][-1].grid(row=index+1, column=3)
-                self.activities_dict[index].append(tk.Button(self.activities_frame, text="Delete", borderwidth=0, highlightthickness=0, fg=self.background_color, activebackground=self.background_color, bg=self.background_color, image=self.DELETEICON, command=lambda:[self.deleteActivity(activity[0]), self.updateInterface()]))
                 self.activities_dict[index][-1].grid(row=index+1, column=4)
+                self.activities_dict[index].append(tk.Button(self.activities_frame, text="Delete", borderwidth=0, highlightthickness=0, fg=self.background_color, activebackground=self.background_color, bg=self.background_color, image=self.DELETEICON, command=lambda:[self.deleteActivity(activity[0]), self.updateInterface()]))
+                self.activities_dict[index][-1].grid(row=index+1, column=5)
 
         createActivityRows() # initializing the function to create the rows with all the activities.
         self.createAddArea() # initializing the function to create the area to add new activities.
@@ -102,7 +107,7 @@ class TimeTracker:
         """ Creates area where the user can add new activities. """
         self.add_activity_entry = tk.Entry(self.main_frame, text="Activity", font=(self.FONTTYPE, '13'))
         self.add_activity_entry.pack(side=tk.LEFT, ipadx=30)
-        self.add_activity_button = tk.Button(self.main_frame, text="Add", image=self.ADDICON, borderwidth=0, highlightthickness=0, fg=self.background_color, activebackground=self.background_color, bg=self.background_color, font=(self.FONTTYPE, '13'), command=lambda:[db.addActivity(self.add_activity_entry), self.add_activity_entry.delete(first=0, last="end"), self.updateInterface()])
+        self.add_activity_button = tk.Button(self.main_frame, text="Add", borderwidth=1, highlightthickness=0, fg="gray26", activeforeground="black", activebackground="white", bg="white", font=(self.FONTTYPE, '10', "bold"), command=lambda:[db.addActivity(self.add_activity_entry), self.add_activity_entry.delete(first=0, last="end"), self.updateInterface()])
         self.add_activity_button.pack(side=tk.LEFT)
 
     def saveTimeToDatabase(self, second_command=None):
@@ -117,7 +122,8 @@ class TimeTracker:
         second_command()
 
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     db = DataBase()
     root = tk.Tk()
     tt = TimeTracker(root)

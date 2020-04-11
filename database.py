@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 
 class DataBase():
@@ -9,7 +10,8 @@ class DataBase():
 
     def createTable(self):
         """ Creating table in database if the table does not exists already. """
-        self.cur.execute("CREATE TABLE IF NOT EXISTS Activities (id INTEGER PRIMARY KEY AUTOINCREMENT, activity TEXT, time TEXT DEFAULT '00:00:00')")
+        date = datetime.today().strftime('%Y-%m-%d')
+        self.cur.execute(f"CREATE TABLE IF NOT EXISTS Activities (id INTEGER PRIMARY KEY AUTOINCREMENT, activity TEXT, time TEXT DEFAULT '00:00:00', date_added TEXT DEFAULT '{date}')")
         self.conn.commit()
 
     def addActivity(self, activity_to_add):
@@ -29,7 +31,7 @@ class DataBase():
 
     def getActivities(self):
         """ Gets all the activities with time spent in total and time spent today """
-        activities = self.cur.execute("SELECT activity, time FROM Activities").fetchall()
+        activities = self.cur.execute("SELECT activity, time, date_added FROM Activities").fetchall()
         return activities
 
     def getActivity(self, activity):
