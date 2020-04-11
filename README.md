@@ -1,5 +1,5 @@
 # timetracker
-With TimeTracker, you can track the time you spend on different activities. The tool is designed for people learning new skills that requires a lot of time. Having a time tracker application can add some motivation towards spending the necessary time on something, for example if you are studying a new language. The app allows you to track several different activities.
+With TimeTracker, you can track the time you spend on different activities. The tool is designed for people learning new skills that requires a lot of time. Having a time tracker application can add some motivation for spending the necessary time on something, for example if you are studying a new language. The app allows you to track several different activities.
 
 ## Getting Started
 
